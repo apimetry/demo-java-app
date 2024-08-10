@@ -19,7 +19,7 @@
 *.tar.gz
 *.rar
 
-
+!opentelemetry-javaagent.jar
 .idea
 .gradle
 build
