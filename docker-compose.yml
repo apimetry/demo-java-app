@@ -1,0 +1,18 @@
+version: '3'
+services:
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+  collector:
+    image: otel/opentelemetry-collector:0.104.0
+    command: [ "--config=/etc/otel-collector-config.yml" ]
+    volumes:
+      - ./otel-config.yml:/etc/otel-collector-config.yml
+    ports:
+      - "4317:4317"
+      - "4318:4318"
+  ingest:
+    image: otel-ingest:local-14
+    ports:
+      - "1992:1992"
