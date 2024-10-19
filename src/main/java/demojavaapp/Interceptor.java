@@ -22,6 +22,7 @@ public class Interceptor implements HandlerInterceptor {
         final int id = Integer.parseInt(merchantId);
         final Merchant merchant = this.database.findMerchantByID(id)
             .orElseThrow();
+        request.setAttribute("Merchant-ID", merchant.id());
         final Span span = Span.current();
         if (span != null) {
             span.setAttribute("limanyo.customer.id", merchant.id());

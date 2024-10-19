@@ -3,6 +3,7 @@ package demojavaapp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Database {
@@ -26,8 +27,8 @@ public class Database {
             .findFirst();
     }
 
-    public Order createOrder(int merchantId) {
-        Order order = new Order(sequence.incrementAndGet(), merchantId);
+    public Order createOrder(int merchantId, Set<String> lineItems) {
+        Order order = new Order(sequence.incrementAndGet(), merchantId, lineItems);
         orders.add(order);
         return order;
     }
@@ -35,6 +36,12 @@ public class Database {
     public Optional<Order> findOrder(int id) {
         return this.orders.stream()
             .filter((order) -> order.id == id)
+            .findFirst();
+    }
+
+    public Optional<Order> findOrder(int id, long merchantId) {
+        return this.orders.stream()
+            .filter((order) -> order.id == id && order.merchantId == merchantId)
             .findFirst();
     }
 

@@ -1,6 +1,9 @@
 package demojavaapp;
 
+import demojavaapp.io.CreateOrderRequest;
 import demojavaapp.io.CreateOrderResponse;
+import demojavaapp.io.GetOrderResponse;
+import demojavaapp.io.ShipOrderRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -16,19 +19,36 @@ public class OrdersController {
     }
 
     @PostMapping
-    public CreateOrderResponse create(@RequestHeader("Merchant-ID") int merchantId) {
-        Order order = this.database.createOrder(merchantId);
+    public CreateOrderResponse create(
+        @RequestHeader("Merchant-ID") int merchantId,
+        CreateOrderRequest request
+    ) {
+        Order order = this.database.createOrder(merchantId, request.lineItems());
         return new CreateOrderResponse(order.id, merchantId);
     }
 
-    @PostMapping(path = "/{orderId}/ship")
-    public void ship(@RequestHeader("Merchant-ID") int merchantId, @PathVariable("orderId") int orderId) {
-        Order order = this.database.findOrder(orderId)
+    @GetMapping(path = "/{orderId}")
+    public GetOrderResponse getOrder(
+        @RequestHeader("Merchant-ID") int merchantId,
+        @PathVariable("orderId") int orderId
+    ) {
+        Order order = this.database.findOrder(orderId, merchantId)
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        if (order.shipped) {
+        return new GetOrderResponse(order.id, order.merchantId, order.lineItems, order.shipment);
+    }
+
+    @PostMapping(path = "/{orderId}/ship")
+    public void ship(
+        @RequestHeader("Merchant-ID") int merchantId,
+        @PathVariable("orderId") int orderId,
+        ShipOrderRequest request
+    ) {
+        Order order = this.database.findOrder(orderId, merchantId)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        if (order.shipment != null)  {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
-        order.shipped = true;
+        order.shipment = request.method();
     }
 
 }
