@@ -1,6 +1,6 @@
 package demojavaapp.io;
 
-import java.util.Set;
+import java.util.List;
 
-public record CreateOrderRequest(Set<PurchaseItem> items) {
+public record CreateOrderRequest(List<PurchaseItem> items) {
 }

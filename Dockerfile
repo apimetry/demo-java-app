@@ -10,5 +10,5 @@ COPY --from=build /app/build/libs/app-0.0.1.jar ./app.jar
 COPY opentelemetry-javaagent.jar /optel-agent.jar
 
 USER nonroot
-ENTRYPOINT ["java", "-javaagent:/optel-agent.jar", "-Dotel.service.name=my-app", "-Dotel.exporter.otlp.endpoint=http://localhost:4317","-jar", "/app/app.jar"]
+ENTRYPOINT ["java", "-javaagent:/optel-agent.jar", "-Dotel.service.name=my-app", "-Dotel.exporter.otlp.endpoint=http://collector:4317","-jar", "/app/app.jar"]
 CMD []

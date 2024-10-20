@@ -32,7 +32,7 @@ public class Database {
             .findFirst();
     }
 
-    public Order createOrder(int merchantId, Set<PurchaseItem> lineItems) {
+    public Order createOrder(int merchantId, List<PurchaseItem> lineItems) {
         Order order = new Order(sequence.incrementAndGet(), merchantId, lineItems);
         orders.add(order);
         return order;

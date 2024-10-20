@@ -1,11 +1,11 @@
 package demojavaapp.io;
 
-import java.util.Set;
+import java.util.List;
 
 public record GetOrderResponse(
     int id,
     int merchantId,
-    Set<PurchaseItem> lineItems,
+    List<PurchaseItem> lineItems,
     ShipmentMethod shipment
 ) {
 }
