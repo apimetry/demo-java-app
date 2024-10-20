@@ -17,8 +17,8 @@ public class MerchantsController {
 
     @PostMapping
     public CreateMerchantResponse create(CreateMerchantRequest request) {
-        final Merchant merchant = this.database.createMerchant(request.name());
-        return new CreateMerchantResponse(merchant.id());
+        Merchant merchant = this.database.createMerchant(request.name());
+        return new CreateMerchantResponse(merchant.id(), merchant.authToken());
     }
 
     @GetMapping(path = "/{merchantId}/orders")

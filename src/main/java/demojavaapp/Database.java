@@ -1,9 +1,6 @@
 package demojavaapp;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Database {
@@ -16,7 +13,7 @@ public class Database {
 
 
     public Merchant createMerchant(String name) {
-        Merchant merchant =  new Merchant(sequence.incrementAndGet(), name);
+        Merchant merchant = new Merchant(sequence.incrementAndGet(), name, UUID.randomUUID().toString());
         this.merchants.add(merchant);
         return merchant;
     }
@@ -24,6 +21,12 @@ public class Database {
     public Optional<Merchant> findMerchantByID(int id) {
         return this.merchants.stream()
             .filter((merchant) -> merchant.id() == id)
+            .findFirst();
+    }
+
+    public Optional<Merchant> findMerchantByAuthToken(String authToken) {
+        return this.merchants.stream()
+            .filter((merchant) -> merchant.authToken().equals(authToken))
             .findFirst();
     }
 
