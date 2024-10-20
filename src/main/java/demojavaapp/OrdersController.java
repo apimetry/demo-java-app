@@ -20,7 +20,7 @@ public class OrdersController {
 
     @PostMapping
     public CreateOrderResponse create(
-        @RequestHeader("Merchant-ID") int merchantId,
+        @RequestAttribute("Merchant-ID") int merchantId,
         @RequestBody CreateOrderRequest request
     ) {
         Order order = this.database.createOrder(merchantId, request.lineItems());
@@ -29,7 +29,7 @@ public class OrdersController {
 
     @GetMapping(path = "/{orderId}")
     public GetOrderResponse getOrder(
-        @RequestHeader("Merchant-ID") int merchantId,
+        @RequestAttribute("Merchant-ID") int merchantId,
         @PathVariable("orderId") int orderId
     ) {
         Order order = this.database.findOrder(orderId, merchantId)
@@ -39,7 +39,7 @@ public class OrdersController {
 
     @PostMapping(path = "/{orderId}/ship")
     public void ship(
-        @RequestHeader("Merchant-ID") int merchantId,
+        @RequestAttribute("Merchant-ID") int merchantId,
         @PathVariable("orderId") int orderId,
         @RequestBody ShipOrderRequest request
     ) {
@@ -50,5 +50,4 @@ public class OrdersController {
         }
         order.shipment = request.method();
     }
-
 }
