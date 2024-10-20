@@ -22,7 +22,7 @@ public class MerchantsController {
         return new CreateMerchantResponse(merchant.id(), merchant.authToken());
     }
 
-    @GetMapping(path = "/{merchantId}/orders")
+    @GetMapping(path = "/orders")
     public GetMerchantOrdersResponse getOrders(@RequestAttribute("Merchant-ID") int merchantId) {
         return new GetMerchantOrdersResponse(this.database.findMerchantOrders(merchantId));
     }

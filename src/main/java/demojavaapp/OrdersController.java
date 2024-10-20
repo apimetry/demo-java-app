@@ -23,7 +23,7 @@ public class OrdersController {
         @RequestAttribute("Merchant-ID") int merchantId,
         @RequestBody CreateOrderRequest request
     ) {
-        Order order = this.database.createOrder(merchantId, request.lineItems());
+        Order order = this.database.createOrder(merchantId, request.items());
         return new CreateOrderResponse(order.id, merchantId);
     }
 
@@ -34,7 +34,7 @@ public class OrdersController {
     ) {
         Order order = this.database.findOrder(orderId, merchantId)
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        return new GetOrderResponse(order.id, order.merchantId, order.lineItems, order.shipment);
+        return new GetOrderResponse(order.id, order.merchantId, order.items, order.shipment);
     }
 
     @PostMapping(path = "/{orderId}/ship")

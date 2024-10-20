@@ -1,5 +1,7 @@
 package demojavaapp;
 
+import demojavaapp.io.PurchaseItem;
+
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -30,7 +32,7 @@ public class Database {
             .findFirst();
     }
 
-    public Order createOrder(int merchantId, Set<String> lineItems) {
+    public Order createOrder(int merchantId, Set<PurchaseItem> lineItems) {
         Order order = new Order(sequence.incrementAndGet(), merchantId, lineItems);
         orders.add(order);
         return order;
