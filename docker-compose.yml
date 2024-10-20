@@ -12,7 +12,3 @@ services:
     ports:
       - "4317:4317"
       - "4318:4318"
-  ingest:
-    image: otel-ingest:local-14
-    ports:
-      - "1992:1992"
