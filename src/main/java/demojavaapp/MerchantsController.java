@@ -16,7 +16,7 @@ public class MerchantsController {
     }
 
     @PostMapping
-    public CreateMerchantResponse create(CreateMerchantRequest request) {
+    public CreateMerchantResponse create(@RequestBody CreateMerchantRequest request) {
         Merchant merchant = this.database.createMerchant(request.name());
         return new CreateMerchantResponse(merchant.id(), merchant.authToken());
     }

@@ -21,7 +21,7 @@ public class OrdersController {
     @PostMapping
     public CreateOrderResponse create(
         @RequestHeader("Merchant-ID") int merchantId,
-        CreateOrderRequest request
+        @RequestBody CreateOrderRequest request
     ) {
         Order order = this.database.createOrder(merchantId, request.lineItems());
         return new CreateOrderResponse(order.id, merchantId);
@@ -41,7 +41,7 @@ public class OrdersController {
     public void ship(
         @RequestHeader("Merchant-ID") int merchantId,
         @PathVariable("orderId") int orderId,
-        ShipOrderRequest request
+        @RequestBody ShipOrderRequest request
     ) {
         Order order = this.database.findOrder(orderId, merchantId)
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
