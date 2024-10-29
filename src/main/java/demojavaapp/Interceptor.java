@@ -31,8 +31,8 @@ public class Interceptor implements HandlerInterceptor {
         request.setAttribute("Merchant-ID", merchant.id());
         final Span span = Span.current();
         if (span != null) {
-            span.setAttribute("limanyo.customer.id", merchant.id());
-            span.setAttribute("limanyo.customer.name", merchant.name());
+            span.setAttribute("apimetry.customer.id", merchant.id());
+            span.setAttribute("apimetry.customer.name", merchant.name());
         }
         return true;
     }
