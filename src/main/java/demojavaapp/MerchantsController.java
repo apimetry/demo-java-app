@@ -19,7 +19,7 @@ public class MerchantsController {
     @NoAuth
     public CreateMerchantResponse create(@RequestBody CreateMerchantRequest request) {
         Merchant merchant = this.database.createMerchant(request.name());
-        return new CreateMerchantResponse(merchant.id(), merchant.authToken());
+        return new CreateMerchantResponse(merchant.id(), merchant.authToken(), merchant.name());
     }
 
     @GetMapping(path = "/orders")

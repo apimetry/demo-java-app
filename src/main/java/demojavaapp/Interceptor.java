@@ -33,6 +33,9 @@ public class Interceptor implements HandlerInterceptor {
         if (span != null) {
             span.setAttribute("apimetry.customer.id", merchant.id());
             span.setAttribute("apimetry.customer.name", merchant.name());
+            if (request instanceof CachingRequestBodyFilter.CachedRequest wrapper) {
+                span.setAttribute("http.body", wrapper.getInputStream().toString());
+            }
         }
         return true;
     }
