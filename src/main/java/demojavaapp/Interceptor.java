@@ -1,6 +1,5 @@
 package demojavaapp;
 
-import io.opentelemetry.api.trace.Span;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
@@ -18,25 +17,17 @@ public class Interceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        final String auth = request.getHeader("Authorization");
-        if (auth == null || auth.isBlank()) {
+        final String id = request.getHeader("Merchant-ID");
+        if (id == null || id.isBlank()) {
             HandlerMethod method = (HandlerMethod) handler;
             if (method.getMethodAnnotation(NoAuth.class) != null) {
                 return true;
             }
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
-        final Merchant merchant = this.database.findMerchantByAuthToken(auth)
+        final Merchant merchant = this.database.findMerchantByID(Integer.parseInt(id))
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.FORBIDDEN));
         request.setAttribute("Merchant-ID", merchant.id());
-        final Span span = Span.current();
-        if (span != null) {
-            span.setAttribute("apimetry.customer.id", merchant.id());
-            span.setAttribute("apimetry.customer.name", merchant.name());
-            if (request instanceof CachingRequestBodyFilter.CachedRequest wrapper) {
-                span.setAttribute("http.body", wrapper.getInputStream().toString());
-            }
-        }
         return true;
     }
 }
