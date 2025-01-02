@@ -3,15 +3,11 @@ package demojavaapp;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import demojavaapp.io.PurchaseItem;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 import java.util.*;
 
-import static demojavaapp.Utils.readf;
 
 public class Database {
 
@@ -87,10 +83,15 @@ public class Database {
             .toList();
     }
 
-    private static <T> T read(String file, Class<T> classDef, T defaultTo) {
-        try {
-            return JSON.readValue(readf(file), classDef);
+    private static <T> T read(String fileName, Class<T> classDef, T defaultTo) {
+        try (FileInputStream fis = new FileInputStream(fileName)) {
+            String data = new String(fis.readAllBytes(), StandardCharsets.UTF_8);
+            if (data == null || data.isBlank()) {
+                return defaultTo;
+            }
+            return JSON.readValue(data, classDef);
         } catch (Exception e) {
+            e.printStackTrace();
             return defaultTo;
         }
     }
@@ -101,7 +102,9 @@ public class Database {
             file.createNewFile();
             var writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8));
             writer.write(JSON.writeValueAsString(data));
+            writer.close();
         } catch (Exception e) {
+            e.printStackTrace();
             throw new RuntimeException(e);
         }
     }
