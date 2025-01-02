@@ -27,8 +27,12 @@ public class Database {
     private static final ObjectMapper JSON = new ObjectMapper();
 
 
+    static int newId() {
+        return Math.abs(RANDOM.nextInt());
+    }
+
     public Merchant createMerchant(String name) {
-        Merchant merchant = new Merchant(RANDOM.nextInt(), name, UUID.randomUUID().toString());
+        Merchant merchant = new Merchant(newId(), name, UUID.randomUUID().toString());
         ListOfMerchants merchants = read(FILE_MERCHANTS, ListOfMerchants.class, ListOfMerchants.EMPTY);
         merchants.list.add(merchant);
         write(FILE_MERCHANTS, merchants);
@@ -52,7 +56,7 @@ public class Database {
     }
 
     public Order createOrder(int merchantId, List<PurchaseItem> lineItems) {
-        Order order = new Order(RANDOM.nextInt(), merchantId, lineItems);
+        Order order = new Order(newId(), merchantId, lineItems);
         ListOfOrders orders = read(FILE_ORDERS, ListOfOrders.class, ListOfOrders.EMPTY);
         orders.list.add(order);
         write(FILE_ORDERS, orders);
